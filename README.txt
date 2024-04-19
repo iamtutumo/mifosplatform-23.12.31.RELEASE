@@ -1,7 +1,14 @@
-
-docker compose pull && docker compose down && docker compose up -d && docker compose logs -f
-
 Installation Instructions 
+
+# git clone https://github.com/iamtutumo/mifosplatform-23.12.31.RELEASE
+# cd mifosplatform-23.12.31.RELEASE/docker/mifosx-mariadb
+# nano docker-compose.yml     * edit the locahost to server ip addresss:8080
+
+# docker compose pull && docker compose down && docker compose up -d && docker compose logs -f
+
+
+
+
 
 Linux Ubuntu Installation Instructions: https://mifosforge.jira.com/wiki/spaces/docs/pages/3506765827/Mifos+X+Platform+23.12+Installation+Instruction+on+Linux+Ubuntu
 
