@@ -1,3 +1,6 @@
+
+docker compose pull && docker compose down && docker compose up -d && docker compose logs -f
+
 Installation Instructions 
 
 Linux Ubuntu Installation Instructions: https://mifosforge.jira.com/wiki/spaces/docs/pages/3506765827/Mifos+X+Platform+23.12+Installation+Instruction+on+Linux+Ubuntu
