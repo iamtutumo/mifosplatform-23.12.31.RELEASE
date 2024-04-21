@@ -23,7 +23,7 @@ services:
       - 3308:3306
     volumes:
 #Remove comment for data persistence
-#      - ./fineract-db/data:/var/lib/mysql
+      - ./fineract-db/data:/var/lib/mysql
       - ./fineract-db/server_collation.cnf:/etc/mysql/conf.d/server_collation.cnf
       - ./fineract-db/max_connections.cnf:/etc/mysql/conf.d/max_connections.cnf
       - ./fineract-db/docker:/docker-entrypoint-initdb.d:Z,ro
