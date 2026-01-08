@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: skdcnwauicn2ucnaecasdsajdnizucawencascdca
+    ports:
+      - "3310:3306"
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/docker:/docker-entrypoint-initdb.d:Z,ro
+
+  fineract-server:
+    image: etumoses/fineract:local
+    restart: unless-stopped
+    ports:
+      - "9080:8080"
+    depends_on:
+      - mariadb
+    environment:
+      - FINERACT_NODE_ID=1
+      - FINERACT_HIKARI_DRIVER_SOURCE_CLASS_NAME=org.mariadb.jdbc.Driver
+      - FINERACT_HIKARI_JDBC_URL=jdbc:mariadb://mariadb:3306/fineract_tenants
+      - FINERACT_HIKARI_USERNAME=root
+      - FINERACT_HIKARI_PASSWORD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
+      - FINERACT_DEFAULT_TENANTDB_HOSTNAME=mariadb
+      - FINERACT_DEFAULT_TENANTDB_PORT=3306
+      - FINERACT_DEFAULT_TENANTDB_UID=root
+      - FINERACT_DEFAULT_TENANTDB_PWD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
+
+  fineract-extension:
+    image: etumoses/fineract-extensions:local
+    restart: unless-stopped
+    ports:
+      - "9090:9000"
+    depends_on:
+      - fineract-server
+      - mariadb
+    environment:
+      - FINERACT_HIKARI_JDBC_URL=jdbc:mariadb://mariadb:3306/fineract_tenants
+      - FINERACT_HIKARI_USERNAME=root
+      - FINERACT_HIKARI_PASSWORD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
+
+  web-app:
+    image: etumoses/web-app:local
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    depends_on:
+      - fineract-server
+    environment:
+      - FINERACT_API_URLS=http://fineract-server:8080
+      - FINERACT_API_URL=http://fineract-server:8080
+      - FINERACT_API_PROVIDER=/fineract-provider/api
+      - FINERACT_API_VERSION=/v1
+      - FINERACT_PLATFORM_TENANT_IDENTIFIER=default
+      - MIFOS_DEFAULT_LANGUAGE=en-US
+      - MIFOS_SUPPORTED_LANGUAGES=cs-CS,de-DE,en-US,es-MX,fr-FR,it-IT,ko-KO,lt-LT,lv-LV,ne-NE,pt-PT,sw-SW
+      - MIFOS_PRELOAD_CLIENTS=true
+      - MIFOS_DEFAULT_CHAR_DELIMITER=,
